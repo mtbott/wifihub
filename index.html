@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📶 MTB WiFi HUB</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { font-size: 28px; }
+
+    .plans {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .plan, .more-toggle {
+      padding: 15px 20px;
+      background: #222;
+      border-radius: 10px;
+      border: 2px solid #444;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 15px;
+    }
+
+    .plan.active {
+      background: #00ff88;
+      color: #000;
+      border-color: #00ff88;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .qr-box {
+      margin-top: 30px;
+    }
+
+    #upiQR {
+      max-width: 200px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    .form-box {
+      margin-top: 40px;
+      max-width: 500px;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    button {
+      background: #00ff88;
+      border: none;
+      padding: 14px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* WhatsApp Floating Button */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      border-radius: 50px;
+      padding: 12px 16px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 0 10px #000;
+      text-decoration: none;
+      z-index: 999;
+    }
+
+    .whatsapp-float img {
+      width: 22px;
+      margin-right: 8px;
+    }
+
+    .map-container {
+      margin-top: 50px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .map-note {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>📶 MTB WiFi Access Plans</h1>
+  <p>Choose your plan (1 device only allowed):</p>
+
+  <div class="plans" id="planContainer"></div>
+
+  <!-- More Plans Toggle -->
+  <div class="plans">
+    <div class="more-toggle" onclick="showMorePlans()">+ More Plans</div>
+    <div id="morePlans" class="plans hidden"></div>
+  </div>
+
+  <div class="qr-box" id="qrSection" style="display:none;">
+    <h3>Pay ₹<span id="selectedAmount">0</span> to continue</h3>
+    <img id="upiQR" src="" alt="UPI QR Code" />
+    <br><br>
+    <a id="upiButton" href="#" target="_blank">
+      <button>📲 Pay via UPI App</button>
+    </a>
+  </div>
+
+  <div class="form-box">
+  <h2 style="margin-bottom: 15px;">📝 Device Registration</h2>
+  <form action="https://formspree.io/f/manjglwr" method="POST" style="margin-top: 10px;">
+    <input type="text" name="device_name" placeholder="Device Name (e.g., Redmi Note 10) - Changable" required
+      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+
+    <input type="text" name="payment_id" placeholder="Transaction ID / UTR (Last 4 Digits)" required
+      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+
+    <input type="text" name="whatsapp" placeholder="WhatsApp Number" required
+      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+
+<p style="text-align: left; font-size: 13px; color: #aaa; margin-bottom: 10px;">IP & Device Info Auto Detected:</p>
+    <input type="text" name="ip_address" id="ipField" placeholder="Detecting IP..." readonly required
+      style="width: 100%; padding: 12px; margin-bottom: 4px; border-radius: 8px; border: none; font-size: 15px; background: #eaeaea; color: #222;" />
+
+<!-- Auto-Detected Device Info -->
+<input type="text" id="deviceInfo" name="device_info" placeholder="Detecting Device Info..." readonly
+  style="width: 100%; padding: 12px; margin-bottom: 6px; border-radius: 8px; border: none; font-size: 15px; background: #eaeaea; color: #222;" />
+
+    <select name="plan" id="planSelected" required
+      style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: none; font-size: 15px;">
+      <option value="">-- Select Plan --</option>
+      <option value="1 Hour">1 Hour - ₹5</option>
+      <option value="1 Day">1 Day - ₹9</option>
+      <option value="7 Days">7 Days - ₹40</option>
+      <option value="15 Days">15 Days - ₹65</option>
+      <option value="30 Days">30 Days - ₹90</option>
+      <option value="6 Months">6 Months - ₹500</option>
+      <option value="1 Year">1 Year - ₹900</option>
+    </select>
+
+    <button type="submit" style="
+      background: #00ff88;
+      color: #000;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    ">✅ Submit Details</button>
+  </form>
+  <p style="margin-top: 12px; font-size: 13px; color: #aaa;">
+    We'll activate your access within 2 Hours after verifying.
+  </p>
+</div>
+
+
+  <!-- 📍 Map Section -->
+  <div class="map-container">
+    <iframe src="https://www.google.com/maps?q=26.3475,89.211861&z=18&output=embed"></iframe>
+    <div class="map-note">📍 You must be within 30 meters of this area to access fast Wi-Fi.</div>
+  </div>
+
+  <!-- 💬 WhatsApp Floating Help Button -->
+  <a href="https://wa.me/919091544508?text=Hi%20MTB%20WiFi%2C%20I%20need%20help%20with%20my%20plan." class="whatsapp-float" target="_blank">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png" />
+    Help?
+  </a>
+
+  <!-- ✅ Scripts -->
+  <script>
+    fetch('https://api.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('ipField').value = data.ip;
+      });
+
+    const plans = [
+      { label: "1 Hour", price: 5 },
+      { label: "1 Day", price: 9 },
+      { label: "7 Days", price: 40 },
+      { label: "15 Days", price: 65 },
+      { label: "30 Days", price: 90 },
+      { label: "6 Months", price: 500 },
+      { label: "1 Year", price: 900 }
+    ];
+
+    const container = document.getElementById('planContainer');
+    const moreContainer = document.getElementById('morePlans');
+    const qr = document.getElementById('upiQR');
+    const qrSection = document.getElementById('qrSection');
+    const amountSpan = document.getElementById('selectedAmount');
+    const upiBtn = document.getElementById('upiButton');
+    const planDropdown = document.getElementById('planSelected');
+
+    function updateQR(amount, label) {
+      const upiLink = `upi://pay?pa=oksdcb@ybl&pn=MTBWiFi&am=${amount}&cu=INR&tn=MTB+WiFi+${label}`;
+      const qrLink = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}`;
+      qr.src = qrLink;
+      upiBtn.href = upiLink;
+      amountSpan.textContent = amount;
+      qrSection.style.display = 'block';
+      planDropdown.value = label;
+    }
+
+    plans.forEach((plan, index) => {
+      const btn = document.createElement('div');
+      btn.className = 'plan';
+      btn.textContent = `${plan.label} - ₹${plan.price}`;
+      btn.onclick = () => {
+        document.querySelectorAll('.plan').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        updateQR(plan.price, plan.label);
+      };
+      if (index < 3) {
+        container.appendChild(btn);
+      } else {
+        moreContainer.appendChild(btn);
+      }
+    });
+
+    function showMorePlans() {
+      moreContainer.classList.remove('hidden');
+      document.querySelector('.more-toggle').style.display = 'none';
+    }
+  </script>
+
+
+
+<!-- Auto-Detected Device Script -->
+<script>
+  const ua = navigator.userAgent;
+  const match = ua.match(/\((.*?)\)/);
+  const deviceDetails = match ? match[1] : ua;
+  document.getElementById("deviceInfo").value = deviceDetails;
+</script>
+
+
+</body>
+</html>
