@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>📶 MTB WiFi HUB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #121212;
       color: #fff;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
     }
     h1 { font-size: 28px; }
 
@@ -53,12 +56,9 @@
 
     .form-box {
       margin-top: 40px;
-      max-width: 500px;
       background: #1e1e1e;
       padding: 20px;
       border-radius: 10px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     input, select {
@@ -68,6 +68,7 @@
       border: none;
       border-radius: 6px;
       font-size: 15px;
+      box-sizing: border-box;
     }
 
     button {
@@ -80,7 +81,6 @@
       cursor: pointer;
     }
 
-    /* WhatsApp Floating Button */
     .whatsapp-float {
       position: fixed;
       bottom: 20px;
@@ -103,7 +103,9 @@
     }
 
     .map-container {
-      margin-top: 50px;
+      margin: 40px auto 20px;
+      max-width: 500px;
+      width: 100%;
       border-radius: 10px;
       overflow: hidden;
     }
@@ -124,7 +126,7 @@
 </head>
 <body>
   <h1>📶 MTB WiFi Access Plans</h1>
-  <p>Choose your plan (1 device only allowed):</p>
+  <p>Choose your plan (1 device only):</p>
 
   <div class="plans" id="planContainer"></div>
 
@@ -143,54 +145,39 @@
     </a>
   </div>
 
+  <!-- 📋 Registration Form -->
   <div class="form-box">
-  <h2 style="margin-bottom: 15px;">📝 Device Registration</h2>
-  <form action="https://formspree.io/f/manjglwr" method="POST" style="margin-top: 10px;">
-    <input type="text" name="device_name" placeholder="Device Name (e.g., Redmi Note 10) - Changable" required
-      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+    <h2 style="margin-bottom: 15px;">📝 Device Registration</h2>
+    <form action="https://formspree.io/f/manjglwr" method="POST" style="margin-top: 10px;">
+      <input type="text" name="device_name" placeholder="Device Name (e.g., Redmi Note 10)" required />
 
-    <input type="text" name="payment_id" placeholder="Transaction ID / UTR (Last 4 Digits)" required
-      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+      <input type="text" name="payment_id" placeholder="Transaction ID / UTR (Last 4 Digits)" required />
 
-    <input type="text" name="whatsapp" placeholder="WhatsApp Number" required
-      style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 15px;" />
+      <input type="text" name="whatsapp" placeholder="WhatsApp Number" required />
 
-<p style="text-align: left; font-size: 13px; color: #aaa; margin-bottom: 10px;">IP & Device Info Auto Detected:</p>
-    <input type="text" name="ip_address" id="ipField" placeholder="Detecting IP..." readonly required
-      style="width: 100%; padding: 12px; margin-bottom: 4px; border-radius: 8px; border: none; font-size: 15px; background: #eaeaea; color: #222;" />
+      <p style="text-align: left; font-size: 13px; color: #aaa; margin-bottom: 10px;">IP & Info Auto Detected:</p>
 
-<!-- Auto-Detected Device Info -->
-<input type="text" id="deviceInfo" name="device_info" placeholder="Detecting Device Info..." readonly
-  style="width: 100%; padding: 12px; margin-bottom: 6px; border-radius: 8px; border: none; font-size: 15px; background: #eaeaea; color: #222;" />
+      <input type="text" name="ip_address" id="ipField" placeholder="Detecting IP..." readonly required />
 
-    <select name="plan" id="planSelected" required
-      style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: none; font-size: 15px;">
-      <option value="">-- Select Plan --</option>
-      <option value="1 Hour">1 Hour - ₹5</option>
-      <option value="1 Day">1 Day - ₹9</option>
-      <option value="7 Days">7 Days - ₹40</option>
-      <option value="15 Days">15 Days - ₹65</option>
-      <option value="30 Days">30 Days - ₹90</option>
-      <option value="6 Months">6 Months - ₹500</option>
-      <option value="1 Year">1 Year - ₹900</option>
-    </select>
+      <input type="text" id="deviceInfo" name="device_info" placeholder="Detecting Device Info..." readonly />
 
-    <button type="submit" style="
-      background: #00ff88;
-      color: #000;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-    ">✅ Submit Details</button>
-  </form>
-  <p style="margin-top: 12px; font-size: 13px; color: #aaa;">
-    We'll activate your access within 2 Hours after verifying.
-  </p>
-</div>
+      <select name="plan" id="planSelected" required>
+        <option value="">-- Select Plan --</option>
+        <option value="1 Hour">1 Hour - ₹5</option>
+        <option value="1 Day">1 Day - ₹9</option>
+        <option value="7 Days">7 Days - ₹40</option>
+        <option value="15 Days">15 Days - ₹65</option>
+        <option value="30 Days">30 Days - ₹90</option>
+        <option value="6 Months">6 Months - ₹500</option>
+        <option value="1 Year">1 Year - ₹900</option>
+      </select>
 
+      <button type="submit">✅ Submit Details</button>
+    </form>
+    <p style="margin-top: 12px; font-size: 13px; color: #aaa;">
+      We'll activate your access within 2 hours after verifying.
+    </p>
+  </div>
 
   <!-- 📍 Map Section -->
   <div class="map-container">
@@ -211,6 +198,11 @@
       .then(data => {
         document.getElementById('ipField').value = data.ip;
       });
+
+    const ua = navigator.userAgent;
+    const match = ua.match(/\((.*?)\)/);
+    const deviceDetails = match ? match[1] : ua;
+    document.getElementById("deviceInfo").value = deviceDetails;
 
     const plans = [
       { label: "1 Hour", price: 5 },
@@ -261,17 +253,5 @@
       document.querySelector('.more-toggle').style.display = 'none';
     }
   </script>
-
-
-
-<!-- Auto-Detected Device Script -->
-<script>
-  const ua = navigator.userAgent;
-  const match = ua.match(/\((.*?)\)/);
-  const deviceDetails = match ? match[1] : ua;
-  document.getElementById("deviceInfo").value = deviceDetails;
-</script>
-
-
 </body>
 </html>
